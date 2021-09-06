@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+</style>
+
+<div class="row pt-5 pb-5">
+    <div class="col-12 text-center justify-content-center">
+
+        <div class="mb-5">
+            <h2 style="color: #2fc0e1;">Internet Banking</h2>
+        </div>
+
+        <div class="mb-4 text-center">
+            <input type="text" id="iban_number" name="iban_number" placeholder="IBAN NUMBER" class="form-control m-auto" />
+        </div>
+        <div class="mb-3 text-center justify-content-center">
+            <input type="password" id="pin" name="pin" placeholder="PIN" class="form-control m-auto" />
+        </div>
+
+        <div id="div_alert" class="alert alert-danger d-none"></div>
+
+        <div class="mb-4">
+            <button id="btn_login" class="btn btn-info btn-main pt-2 pb-2" onclick="login()">Login</button>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        function login() {
+
+            var iban = $('#iban_number').val();
+            var pin = $('#pin').val();
+
+            if (iban.length > 0 && pin.length > 0) {
+
+                $.ajax({
+                url: '@Url.Action("CheckLogIn", "App")',
+                method: "POST",
+                data: {
+                    in_iban: iban,
+                    in_pin: pin
+                },
+                datatype: "json",
+                  success: function (data) {
+                      if (data.result == "SUCCESS") {
+                          $('#div_alert').addClass('d-none');
+                          location.replace('@Url.Action("Account", "App")');
+                      } else {
+                          $('#div_alert').html(data.message);
+                          $('#div_alert').removeClass('d-none');
+                      }
+                }
+             });
+            }
+            else {
+                $('#div_alert').html('Invalid IBAN NUMBER or PIN. please try again.');
+                $('#div_alert').removeClass('d-none');
+            }
+
+        }
+    </script>
+
+
+
+}

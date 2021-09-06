@@ -1,0 +1,223 @@
+﻿
+@{
+    ViewBag.Title = "Account";
+}
+
+<div class="row pt-1 pb-5">
+    <div class="col-12">
+
+        <div class="text-right mb-3">
+            <button class="btn btn-sm btn-secondary" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+
+        <div class="mb-5 text-center">
+            <h2 style="color: #2fc0e1;">Internet Banking</h2>
+        </div>
+
+        <div class="jumbotron p-2">
+
+            <h3 class="pb-2" style="color: #2fc0e1;">@ViewBag.full_name</h3>
+            <hr>
+
+            <h6>SAVINGS ACCOUNT</h6>
+            <p>@ViewBag.iban_number</p>
+
+            <h6>Available Blance</h6>
+            <p>@ViewBag.balance</p>
+            <div class="text-center mb-3">
+                <button class="btn btn-success" data-toggle="modal" data-target="#DepositModal"><i class="fas fa-money-bill-wave"></i> Deposit</button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#WithdrawModal"><i class="fas fa-hand-holding-usd"></i> Withdraw</button>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#TransferModal"><i class="fas fa-exchange-alt"></i> Transfer</button>
+            </div>
+
+
+            <div id="transactions" class="collapse">
+                Lorem ipsum dolor text....
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="DepositModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" style="color: #2fc0e1;">Deposit</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <p>Amount</p>
+                <input type="number" id="deposit_amount" name="deposit_amount" placeholder="0" class="form-control w-100" />
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-success" onclick="deposit()">Confirm</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="WithdrawModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" style="color: #2fc0e1;">Withdraw</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <p>Amount</p>
+                <input type="number" id="withdraw_amount" name="withdraw_amount" placeholder="0" class="form-control w-100" />
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-success" onclick="withdraw()">Confirm</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="TransferModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" style="color: #2fc0e1;">Transfer</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <p>IBAN Destination</p>
+                <input type="text" id="destination" name="destination" placeholder="IBAN Number" class="form-control w-100" />
+                <p class="mt-3">Amount</p>
+                <input type="number" id="transfer_amount" name="transfer_amount" placeholder="0" class="form-control w-100" />
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-success" onclick="transfer()">Confirm</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        function deposit() {
+
+            var amount = $('#deposit_amount').val();
+
+            if (amount.length > 0 && amount.length !== '0') {
+
+                $.ajax({
+                url: '@Url.Action("Deposit", "App")',
+                method: "POST",
+                data: {
+                    in_amount: amount
+                },
+                datatype: "json",
+                  success: function (data) {
+                      if (data.result == "SUCCESS") {
+                          alert("The transaction is complete");
+                          location.replace('@Url.Action("Account", "App")');
+                      } else {
+                          alert(data.message);
+                      }
+                }
+             });
+            }
+            else {
+                alert("Please check the amount");
+            }
+        }
+
+        function withdraw() {
+
+            var amount = $('#withdraw_amount').val();
+
+            if (amount.length > 0 && amount.length !== '0') {
+
+                $.ajax({
+                url: '@Url.Action("Withdraw", "App")',
+                method: "POST",
+                data: {
+                    in_amount: amount
+                },
+                datatype: "json",
+                  success: function (data) {
+                      if (data.result == "SUCCESS") {
+                          alert("The transaction is complete");
+                          location.replace('@Url.Action("Account", "App")');
+                      } else {
+                          alert(data.message);
+                      }
+                }
+             });
+            }
+            else {
+                alert("Please check the amount");
+            }
+        }
+
+        function transfer() {
+
+            var amount = $('#transfer_amount').val();
+            var destination = $('#destination').val();
+
+            if (amount.length > 0 && amount.length !== '0') {
+
+                $.ajax({
+                url: '@Url.Action("Transfer", "App")',
+                method: "POST",
+                data: {
+                    in_amount: amount,
+                    in_destination: destination
+                },
+                datatype: "json",
+                  success: function (data) {
+                      if (data.result == "SUCCESS") {
+                          alert("The transaction is complete");
+                          location.replace('@Url.Action("Account", "App")');
+                      } else {
+                          alert(data.message);
+                      }
+                }
+             });
+            }
+            else {
+                alert("Please check the amount");
+            }
+        }
+
+        function logout() {
+            location.replace('@Url.Action("Logout", "App")');
+        }
+
+    </script>
+
+}
+
