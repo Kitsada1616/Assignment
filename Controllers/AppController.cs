@@ -36,7 +36,7 @@ namespace Assignment.Controllers
                     {
                         ViewBag.full_name = data.TITLE.ToString() + " " + data.FIRST_NAME.ToString() + " " + data.MIDDLE_NAME.ToString() + " " + data.LAST_NAME.ToString();
                         ViewBag.iban_number = iban_number.ToString();
-                        ViewBag.balance = data.ACC_BALANCE.ToString();
+                        ViewBag.balance = decimal.Parse(data.ACC_BALANCE.ToString()).ToString("N2");
                     }
                 }
                 else
@@ -267,7 +267,6 @@ namespace Assignment.Controllers
         public ActionResult TEST()
         {
             String result = String.Empty;
-            ViewBag.test = result;
 
             //DataTable data_table = new DataTable();
 
@@ -277,12 +276,12 @@ namespace Assignment.Controllers
             //try
             //{
             //    con.Open();
-            //    SqlCommand command = new SqlCommand("SELECT * FROM [dbo].[MEMBER] where [IBAN_NUMBER]=@in_iban", con);
+            //    SqlCommand command = new SqlCommand("SELECT * FROM [dbo].[ACCOUNT] where [IBAN_NUMBER]=@in_iban", con);
             //    command.Parameters.AddWithValue("@in_iban", "0");
             //    SqlDataReader reader = command.ExecuteReader();
             //    data_table.Load(reader);
 
-            //    result = data_table.Rows.Count.ToString() + "/2";
+            //    result = data_table.Rows.Count.ToString();
 
             //}
             //catch(Exception ex)
